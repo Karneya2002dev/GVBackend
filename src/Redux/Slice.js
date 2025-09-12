@@ -139,7 +139,7 @@ import axios from "axios";
 export const fetchCategories = createAsyncThunk(
   "products/fetchCategories",
   async () => {
-    const res = await axios.get("https://mysql-production-986b.up.railway.app/api/categories");
+    const res = await axios.get("https://crackersss-production.up.railway.app/api/categories");
     return res.data;
   }
 );

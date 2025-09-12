@@ -17,7 +17,7 @@ export default function AdminProductForm() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get("https://mysql-production-986b.up.railway.app/api/categories");
+        const res = await axios.get("https://crackersss-production.up.railway.app/api/categories");
         setCategories(res.data);
         if (res.data.length > 0) {
           setFormData((prev) => ({
@@ -58,7 +58,7 @@ export default function AdminProductForm() {
 
     try {
       setLoading(true);
-      const res = await axios.post("https://mysql-production-986b.up.railway.app/api/products", data, {
+      const res = await axios.post("https://crackersss-production.up.railway.app/api/products", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
