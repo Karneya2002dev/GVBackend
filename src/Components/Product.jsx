@@ -30,7 +30,7 @@ export default function Products() {
   const cartSectionRef = useRef(null);
 
   const [showStickyCategory, setShowStickyCategory] = useState(true);
-
+  const [previewImg, setPreviewImg] = useState(null);
   // ✅ Fetch categories
   useEffect(() => {
     const loadCategories = async () => {
@@ -227,66 +227,109 @@ export default function Products() {
             </div>
             <div className="divide-y divide-gray-200 relative">
               <div className="max-h-[450px] overflow-y-auto pr-2">
-                   {selectedCategory.items.map((item, i) => (
-                    <motion.div
-                      key={item.id}
-                       initial={{ opacity: 0, x: -30 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.1 }}
-                     className="flex items-center justify-between py-4 border-b last:border-b-0"
-    >
-      {/* Left: Image + Details */}
-      <div className="flex items-center gap-4">
-        <img
-          src={`https://crackersss-production.up.railway.app/${item.img.replace(/^\/+/, "")}`}
-          alt={item.name}
-          className="h-20 w-20 object-cover rounded-xl shadow-md border"
-        />
-        <div>
-          <h3 className="font-semibold text-lg">{item.name}</h3>
+                {selectedCategory.items.map((item, i) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, x: -30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                    className="flex items-center justify-between py-4 border-b last:border-b-0"
+                  >
+                    {/* Left: Image + Details */}
+                    <div className="flex items-center gap-4">
+                      <img
+                        src={`https://crackersss-production.up.railway.app/${item.img.replace(
+                          /^\/+/,
+                          ""
+                        )}`}
+                        alt={item.name}
+                        className="h-20 w-20 object-cover rounded-xl shadow-md border cursor-pointer hover:scale-105 transition-transform"
+                        onClick={() =>
+                          setPreviewImg(
+                            `https://crackersss-production.up.railway.app/${item.img.replace(
+                              /^\/+/,
+                              ""
+                            )}`
+                          )
+                        }
+                      />
 
-          {/* Old price (per unit) */}
-          <p className="text-sm text-gray-400 line-through">
-            ₹{item.Mkt_price} <span className="text-xs">(per unit)</span>
-          </p>
+                      <div>
+                        <h3 className="font-semibold text-lg">{item.name}</h3>
 
-          {/* Our price (per unit) */}
-          <p className="text-green-600 font-bold">
-            ₹{item.our_price}{" "}
-            <span className="text-xs font-normal text-gray-400">(per unit)</span>
-          </p>
+                        {/* Old price (per unit) */}
+                        <p className="text-sm text-gray-400 line-through">
+                          ₹{item.Mkt_price}{" "}
+                          <span className="text-xs">(per unit)</span>
+                        </p>
 
-          {/* Total Price comparison */}
-          <div className="flex items-center gap-2 mt-1">
-            <p className="text-sm text-gray-500 line-through">
-              ₹{item.Mkt_price * item.Qty}
-            </p>
-            <p className="text-blue-600 font-semibold">
-              Total: ₹{item.our_price * item.Qty}
-            </p>
-          </div>
-        </div>
-      </div>
+                        {/* Our price (per unit) */}
+                        <p className="text-green-600 font-bold">
+                          ₹{item.our_price}{" "}
+                          <span className="text-xs font-normal text-gray-400">
+                            (per unit)
+                          </span>
+                        </p>
 
-      {/* Right: Quantity controls */}
-      <div className="flex items-center gap-3">
-        <button
-          onClick={() => handleDecrease(item.id, selectedCategory.id)}
-          className="px-3 py-1 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
-        >
-          -
-        </button>
-        <span className="w-8 text-center font-medium">{item.Qty}</span>
-        <button
-          onClick={() => handleIncrease(item.id, selectedCategory.id)}
-          className="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-        >
-          +
-        </button>
-      </div>
-    </motion.div>
-  ))}
-</div>
+                        {/* Total Price comparison */}
+                        <div className="flex items-center gap-2 mt-1">
+                          <p className="text-sm text-gray-500 line-through">
+                            ₹{item.Mkt_price * item.Qty}
+                          </p>
+                          <p className="text-blue-600 font-semibold">
+                            Total: ₹{item.our_price * item.Qty}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right: Quantity controls */}
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() =>
+                          handleDecrease(item.id, selectedCategory.id)
+                        }
+                        className="px-3 py-1 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+                      >
+                        -
+                      </button>
+                      <span className="w-8 text-center font-medium">{item.Qty}</span>
+                      <button
+                        onClick={() =>
+                          handleIncrease(item.id, selectedCategory.id)
+                        }
+                        className="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Image Preview Modal */}
+              <AnimatePresence>
+                {previewImg && (
+                  <motion.div
+                    className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onClick={() => setPreviewImg(null)}
+                  >
+                    <motion.img
+                      src={previewImg}
+                      alt="Preview"
+                      className="max-w-[90%] max-h-[90%] rounded-xl shadow-2xl"
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0.8, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      onClick={(e) => e.stopPropagation()} // Prevent closing when clicking image
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
 
 
@@ -346,10 +389,10 @@ export default function Products() {
                 >
                   <div className="flex items-center gap-3">
                     <img
-  src={`https://crackersss-production.up.railway.app/${item.img.replace(/^\/+/, '')}`}
-  alt={item.name}
-  className="h-20 w-20 object-cover rounded-lg border"
-/>
+                      src={`https://crackersss-production.up.railway.app/${item.img.replace(/^\/+/, '')}`}
+                      alt={item.name}
+                      className="h-20 w-20 object-cover rounded-lg border"
+                    />
 
                     <div>
                       <h3 className="font-semibold">{item.Name}</h3>
