@@ -172,7 +172,7 @@ export default function Products() {
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="sticky top-20 bg-white z-10"
+            className="sticky top-18 bg-white z-10"
           >
             <div className="flex mx-5 overflow-x-auto gap-4 p-2 scrollbar-hide scroll-smooth">
               {categories.map((item, i) => (
@@ -205,7 +205,7 @@ export default function Products() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
-            className="mb-10"
+            className="mb-10 px-27"
           >
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold mb-4">{selectedCategory.Name}</h2>
@@ -225,52 +225,70 @@ export default function Products() {
                 )}
               </div>
             </div>
-
             <div className="divide-y divide-gray-200 relative">
               <div className="max-h-[450px] overflow-y-auto pr-2">
-                {selectedCategory.items.map((item, i) => (
-                  <motion.div
-                    key={item.id}
-                    initial={{ opacity: 0, x: -30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.1 }}
-                    className="flex items-center justify-between py-4"
-                  >
-                    <div className="flex items-center gap-4">
-                      <img
-  src={`https://crackersss-production.up.railway.app/${item.img.replace(/^\/+/, '')}`}
-  alt={item.name}
-  className="h-20 w-20 object-cover rounded-lg border"
-/>
+                   {selectedCategory.items.map((item, i) => (
+                    <motion.div
+                      key={item.id}
+                       initial={{ opacity: 0, x: -30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                     className="flex items-center justify-between py-4 border-b last:border-b-0"
+    >
+      {/* Left: Image + Details */}
+      <div className="flex items-center gap-4">
+        <img
+          src={`https://crackersss-production.up.railway.app/${item.img.replace(/^\/+/, "")}`}
+          alt={item.name}
+          className="h-20 w-20 object-cover rounded-xl shadow-md border"
+        />
+        <div>
+          <h3 className="font-semibold text-lg">{item.name}</h3>
 
-                      <div>
-                        <h3 className="font-semibold">{item.name}</h3>
-                        <p className="text-sm text-gray-500 line-through">
-                          ₹{item.Mkt_price * item.Qty}
-                        </p>
-                        <p className="text-green-600 font-bold">
-                          ₹{item.our_price * item.Qty}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => handleDecrease(item.id, selectedCategory.id)}
-                        className="px-2 py-1 bg-gray-200 rounded-lg hover:bg-gray-300"
-                      >
-                        -
-                      </button>
-                      <span className="w-8 text-center">{item.Qty}</span>
-                      <button
-                        onClick={() => handleIncrease(item.id, selectedCategory.id)}
-                        className="px-2 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+          {/* Old price (per unit) */}
+          <p className="text-sm text-gray-400 line-through">
+            ₹{item.Mkt_price} <span className="text-xs">(per unit)</span>
+          </p>
+
+          {/* Our price (per unit) */}
+          <p className="text-green-600 font-bold">
+            ₹{item.our_price}{" "}
+            <span className="text-xs font-normal text-gray-400">(per unit)</span>
+          </p>
+
+          {/* Total Price comparison */}
+          <div className="flex items-center gap-2 mt-1">
+            <p className="text-sm text-gray-500 line-through">
+              ₹{item.Mkt_price * item.Qty}
+            </p>
+            <p className="text-blue-600 font-semibold">
+              Total: ₹{item.our_price * item.Qty}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Right: Quantity controls */}
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => handleDecrease(item.id, selectedCategory.id)}
+          className="px-3 py-1 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+        >
+          -
+        </button>
+        <span className="w-8 text-center font-medium">{item.Qty}</span>
+        <button
+          onClick={() => handleIncrease(item.id, selectedCategory.id)}
+          className="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+        >
+          +
+        </button>
+      </div>
+    </motion.div>
+  ))}
+</div>
+
+
 
               <div className="flex justify-end mt-4 sticky bottom-0 bg-white py-1">
                 <motion.button
@@ -309,7 +327,7 @@ export default function Products() {
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
-        className="px-6 pt-20 bg-gray-100 min-h-screen"
+        className="px-27 pt-20 bg-gray-100 min-h-screen"
       >
         <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
         {cartItems.filter((item) => item.Qty > 0).length === 0 ? (
